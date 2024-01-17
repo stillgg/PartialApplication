@@ -10,20 +10,30 @@ const checkPin = (...code) => code.join("") === EXPECTED_PIN;
 //
 // For hint use https://github.com/HowProgrammingWorks/Cheatsheet
 
-const press = (digit) => {
-  const func = (...digits) => {
-    if (digits.length === EXPECTED_PIN.length)
-      return digits.join("") === EXPECTED_PIN;
+//clear solution
+// const press = (digit) => {
+//   function wrapperFn(digits, pinLen) {
+//     if (pinLen > digits.length) {
+//       wrapperFn.press = (digit) => wrapperFn([...digits, digit], pinLen);
 
-    return {
-      press: (digit) => {
-        return func.call(null, ...digits, digit);
-      },
-    };
-  };
+//       return wrapperFn;
+//     }
 
-  return func(digit);
-};
+//     return checkPin(...digits);
+//   }
+
+//   return wrapperFn([digit], 4);
+// };
+
+//short solution
+const press = (digit) =>
+  (function fn(...digits) {
+    if (4 > digits.length) {
+      fn.press = (digit) => fn(...digits, digit);
+      return fn;
+    }
+    return checkPin(...digits);
+  })(digit);
 
 // console.log(press("3").press("4").press("5").press("6"));
 
